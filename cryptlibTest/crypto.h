@@ -97,4 +97,18 @@ inline bool RsaVerifyString(const std::string &aPublicKeyStrHex,
   return result;
 }
 
+inline std::string sha256_hex(const std::string & str)
+{
+    CryptoPP::byte digest[CryptoPP::SHA256::DIGESTSIZE];
+    CryptoPP::SHA256().CalculateDigest(digest, (CryptoPP::byte*)&str[0], str.size());
+
+    std::string ret;
+    CryptoPP::HexEncoder encoder;
+    encoder.Attach(new CryptoPP::StringSink(ret));
+    encoder.Put(digest, sizeof(digest));
+    encoder.MessageEnd();
+
+    return ret;
+}
+
 #endif // CRYPTO_H

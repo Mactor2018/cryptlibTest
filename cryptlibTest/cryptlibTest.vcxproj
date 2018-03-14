@@ -148,6 +148,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="crypto.h" />
     <ClInclude Include="include\3way.h" />
     <ClInclude Include="include\adler32.h" />
     <ClInclude Include="include\adv-simd.h" />

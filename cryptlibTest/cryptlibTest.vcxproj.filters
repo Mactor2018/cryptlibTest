@@ -513,6 +513,9 @@
     <ClInclude Include="include\zlib.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="crypto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

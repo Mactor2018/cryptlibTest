@@ -2,58 +2,62 @@
 //
 
 #include "stdafx.h"
-
-//For AES encrypt
-#include "default.h" 
-#include "cryptlib.h"
-#include "filters.h"
-#include "bench.h"
-#include "osrng.h"
-#include "hex.h"
-#include "modes.h"
-#include "files.h"
-
-#define CRYPTOPP_DEFAULT_NO_DLL
-#define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
-
-#include "dll.h"
-#include "config.h"
-#include "aes.h"
-#include "md5.h"
-#include "ripemd.h"
-#include "rng.h"
-#include "gzip.h"
-#include "randpool.h"
-#include "ida.h"
-#include "base64.h"
-#include "socketft.h"
-#include "wait.h"
-#include "factory.h"
-#include "tiger.h"
-#include "smartptr.h"
-#include "pkcspad.h"
-#include "stdcpp.h"
-#include "ossig.h"
-#include "trap.h"
-#include "validate.h"
-
 #include <iostream>
-#include <sstream>
-#include <locale>
-#include <ctime>
 #include <string>
-#include "cryptlib.h"
-#include <sha.h>
-#include <hex.h>
+#include "crypto.h"
+#include "resource.h"
 
-using namespace CryptoPP;
-#pragma comment(lib, "lib\\cryptlib.lib") 
+////For AES encrypt
+//#include "default.h" 
+//#include "cryptlib.h"
+//#include "filters.h"
+//#include "bench.h"
+//#include "osrng.h"
+//#include "hex.h"
+//#include "modes.h"
+//#include "files.h"
+//
+//#define CRYPTOPP_DEFAULT_NO_DLL
+//#define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
+//
+//#include "dll.h"
+//#include "config.h"
+//#include "aes.h"
+//#include "md5.h"
+//#include "ripemd.h"
+//#include "rng.h"
+//#include "gzip.h"
+//#include "randpool.h"
+//#include "ida.h"
+//#include "base64.h"
+//#include "socketft.h"
+//#include "wait.h"
+//#include "factory.h"
+//#include "tiger.h"
+//#include "smartptr.h"
+//#include "pkcspad.h"
+//#include "stdcpp.h"
+//#include "ossig.h"
+//#include "trap.h"
+//#include "validate.h"
+//
+//#include <iostream>
+//#include <sstream>
+//#include <locale>
+//#include <ctime>
+//#include <string>
+//#include "cryptlib.h"
+//#include <sha.h>
+//#include <hex.h>
+//
+//using namespace CryptoPP;
+//#pragma comment(lib, "lib\\cryptlib.lib") 
 
 using namespace std;
 
-void GenerateRSAKey();
-void Sign();
-void Verify();
+//void GenerateRSAKey();
+//void Sign();
+//void Verify();
 string sha256_hex(const string & str);
 
 void main() {
@@ -64,23 +68,48 @@ void main() {
     //auto sha256 = sha256_hex("original string");
     //cout << "str     = " << "original string" << endl << "sha 256 = " << sha256 << endl;
 
+    //auto keys = RsaGenerateHexKeyPair(2048);
+
+    KeyPairHex keys;
+    keys.privateKey = PRIVATE_KEY;
+    keys.publicKey = PUBLIC_KEY;
+
+    std::cout << "Private key: " << std::endl << keys.privateKey << "\n" << std::endl;
+    std::cout << "Public key: " << std::endl << keys.publicKey << "\n" << std::endl;
+
+    std::string message("secret message");
+    std::cout << "Message:" << std::endl;
+    std::cout << message << "\n" << std::endl;
+
+    // generate a signature for the message
+    auto signature(RsaSignString(keys.privateKey, message));
+    std::cout << "Signature:" << std::endl;
+    std::cout << signature << "\n" << std::endl;
+
+    // verify signature against public key
+    if (RsaVerifyString(keys.publicKey, message, signature)) {
+        std::cout << "Signatue valid." << std::endl;
+    }
+    else {
+        std::cout << "Signatue invalid." << std::endl;
+    }
 
     getchar();
 }
 
-//string sha256_hex(const string & str)
-//{
-//    CryptoPP::byte digest[CryptoPP::SHA256::DIGESTSIZE];
-//    CryptoPP::SHA256().CalculateDigest(digest, (CryptoPP::byte*)&str[0], str.size());
-//
-//    string ret;
-//    CryptoPP::HexEncoder encoder;
-//    encoder.Attach(new CryptoPP::StringSink(ret));
-//    encoder.Put(digest, sizeof(digest));
-//    encoder.MessageEnd();
-//
-//    return ret;
-//}
+string sha256_hex(const string & str)
+{
+    CryptoPP::byte digest[CryptoPP::SHA256::DIGESTSIZE];
+    CryptoPP::SHA256().CalculateDigest(digest, (CryptoPP::byte*)&str[0], str.size());
+
+    string ret;
+    CryptoPP::HexEncoder encoder;
+    encoder.Attach(new CryptoPP::StringSink(ret));
+    encoder.Put(digest, sizeof(digest));
+    encoder.MessageEnd();
+
+    return ret;
+}
 
 //void GenerateRSAKey()
 //{

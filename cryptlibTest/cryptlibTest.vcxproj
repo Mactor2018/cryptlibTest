@@ -311,6 +311,7 @@
     <ClInclude Include="include\zdeflate.h" />
     <ClInclude Include="include\zinflate.h" />
     <ClInclude Include="include\zlib.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
